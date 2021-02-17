@@ -109,11 +109,13 @@ module.exports = {
       });
 
       let savedUser = await createdUser.save();
+      
+      res.render("sign-up", { error: null, success: true })
 
-      res.status(200).json({
-        message: "success",
-        user: savedUser,
-      });
+      // res.status(200).json({
+      //   message: "success",
+      //   user: savedUser,
+      // });
     } catch (error) {
       res.status(500).json({
         message: "error",
