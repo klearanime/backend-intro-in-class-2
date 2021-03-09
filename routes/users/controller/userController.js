@@ -109,7 +109,7 @@ module.exports = {
       });
 
       let savedUser = await createdUser.save();
-      
+
       res.render("sign-up", { error: null, success: true })
 
       // res.status(200).json({
@@ -195,8 +195,10 @@ module.exports = {
       let foundUser = await User.findOne({ email: req.body.email });
 
       if (!foundUser) {
-        res.status(404).json({
-          message: "failure",
+        res.render("login", {
+          error: {
+            message: "User does not exists please go signup.",
+          }
         });
       } else {
         let isPasswordTrue = await bcrypt.compare(
@@ -205,14 +207,18 @@ module.exports = {
         );
 
         if (isPasswordTrue) {
-          res.json({
-            message: "success",
-            successMessage: "Logged In!",
-          });
+          req.session.user = {
+            _id: foundUser._id,
+            email: foundUser.email,
+          }
+
+          res.redirect("/users/home")
+
         } else {
-          res.status(500).json({
-            message: "failure",
-            successMessage: "please check your email and password",
+          res.render("login", {
+            error: {
+              message: "Please check your email and password",
+            }
           });
         }
       }
@@ -222,18 +228,5 @@ module.exports = {
         errorMessage: error.message,
       });
     }
-
-    //step 1 find the user e.g email
-    //step 2 if the user doesnt exists tell
-    //send a message back saying 'User not found go
-    //go sign up
-    //step 3 if the user is found
-    //compare the password
-    //if the password does not match
-    //send a message back saying
-    //check your email and password
-    //if passord matches
-    //send a message back saying
-    //successfully logged In
   },
 };

@@ -22,7 +22,7 @@ const checkSignupInputIsEmpty = (req, res, next) => {
   }
 
   if (Object.keys(errorObj).length > 0) {
-    res.render("sign-up", { error: errorObj, success: null })
+    res.render("sign-up", { error: errorObj })
     // res.status(500).json({
     //   message: "Error",
     //   data: errorObj,
